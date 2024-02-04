@@ -17,16 +17,16 @@ func find_requested_file(route string, dir string) string {
 
 	file_path := "static/404.html"
 	files, err := ioutil.ReadDir(dir)
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err)
 	}
 
 	for _, file := range files {
 		file_name := dir + "/" + file.Name()
-		if (route == file_name) {
+		if route == file_name {
 			return file_name
 		}
-		if (file.IsDir()) {
+		if file.IsDir() {
 			file_path = find_requested_file(route, file_name)
 		}
 	}
@@ -40,7 +40,7 @@ func main() {
 	// Listen for connections
 	listener, err := net.Listen(NETWORK_TYPE, address)
 
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -52,7 +52,7 @@ func main() {
 		// Accept for connections
 		conn, err := listener.Accept()
 
-		if (err != nil) {
+		if err != nil {
 			fmt.Println(err)
 		}
 
@@ -66,7 +66,7 @@ func process(conn net.Conn) {
 	// Read buffer of the request
 	_, err := conn.Read(buf)
 
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -86,11 +86,11 @@ func process(conn net.Conn) {
 	html_ext := route[len(route)-5:]
 	ico_ext := route[len(route)-4:]
 
-	if (html_ext != ".html" && ico_ext != ".ico" && route[len(route)-1] != '/') {
+	if html_ext != ".html" && ico_ext != ".ico" && route[len(route)-1] != '/' {
 		route += "/"
 	}
 
-	if (route[len(route)-1] == '/') {
+	if route[len(route)-1] == '/' {
 		route += "index.html"
 	}
 
@@ -99,7 +99,7 @@ func process(conn net.Conn) {
 	
 	buf, err = os.ReadFile(file_path)
 	
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -110,7 +110,7 @@ func process(conn net.Conn) {
 	// Send the buffer of the file content
 	_, err = conn.Write(file_buf)
 
-	if (err != nil) {
+	if err != nil {
 		fmt.Println(err)
 	}
 
